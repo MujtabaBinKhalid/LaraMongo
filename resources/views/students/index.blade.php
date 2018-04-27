@@ -25,51 +25,26 @@
 
 <script>
 function myFunction() {
-    alert("Hello! I am an alert box!");
+  var input, filter, table, tr, td, i;
+  var selection = document.getElementById("selection");
+	var selectionIndex = selection.selectedIndex;
+  console.log(selectionIndex);
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[selectionIndex];
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
 }
 </script>
-<script>
-(function(document) {
-	'use strict';
-
-	var LightTableFilter = (function(Arr) {
-
-		var _input;
-
-		function _onInputEvent(e) {
-			_input = e.target;
-			var tables = document.getElementsByClassName(_input.getAttribute('data-table'));
-			Arr.forEach.call(tables, function(table) {
-				Arr.forEach.call(table.tBodies, function(tbody) {
-					Arr.forEach.call(tbody.rows, _filter);
-				});
-			});
-		}
-
-		function _filter(row) {
-			var text = row.textContent.toLowerCase(), val = _input.value.toLowerCase();
-			row.style.display = text.indexOf(val) === -1 ? 'none' : 'table-row';
-		}
-
-		return {
-			init: function() {
-				var inputs = document.getElementsByClassName('light-table-filter');
-				Arr.forEach.call(inputs, function(input) {
-					input.oninput = _onInputEvent;
-				});
-			}
-		};
-	})(Array.prototype);
-
-	document.addEventListener('readystatechange', function() {
-		if (document.readyState === 'complete') {
-			LightTableFilter.init();
-		}
-	});
-
-})(document);
-</script>
-
 
 
 </head>
@@ -126,64 +101,60 @@ function myFunction() {
                  	<div class="col-md-6" style="float: right;">
                  		
                        	   <div class="form-group">
-                                 <input style="width: 300px;" class=" light-table-filter" placeholder="Search By Student Name" data-table="order-table" type="search" name="search">
-                                 
-                              </div>
+                              <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">                   
+    
+      <select id="selection">
+       <option value="1">Serial No.</option>
+       <option value="1">Name</option>
+       <option value="2">ID</option>
+       <option value="3">Email</option>
+    </select>
+                    </div>
                     	
                  </div>
                  <br><br>
             <div class="panel-body">
-                    <table class="order-table table">
-                        <thead>
-                             <th>No. </th>
-                              <th>
-                                    Student Name
-                              </th>
-                              <th>
-                                   Student ID
-                              </th>
-                               <th>
-                                   Student Mail
-                              </th> 
-                               <th>
-                                   Student Phone
-                              </th> 
-                               <th>
-                                   Student Gender
-                              </th>   
-                              <th>
-                                    Edit
-                              </th>
-
-                              <th>
-                                    Delete
-                              </th>
+              
+<table id="myTable"  class="order-table table">
+<thead>
+                        <tr class="header">
+                             <th>Serial No.</th>
+                              <th>Name</th>
+                              <th>ID</th>
+                               <th>Email</th> 
+                               <th>Student Phone</th> 
+                               <th>Student Gender</th>   
+                              <th>Edit</th>
+                              <th>Delete</th>
+                              </tr>
                         </thead>
-
-                        <tbody>
-                            <?php $i=0;?>
-                          @foreach($students as $student)
-                          
-                            <tr>
-                              <td><?php echo ++$i;?></td>
-                              <td>{{ $student->name }}</td>
-                              <td>{{ $student->id }}</td>
-                              <td>{{ $student->email }}</td>
-                              <td>{{ $student->phone }}</td>
-                              <td>{{ $student->gender }}</td>
-                              <td>
-                                    <a href="/edituser/{{$student->id}}" class="btn btn-xs btn-info">Edit</a>
-                              </td>
-                              <td>
-                              <a href="/deleteuser/{{$student->id}}" class="btn btn-xs btn-danger">Delete</a>
-                                   
-                              </td>
-                            </tr>
-                          @endforeach
-                        </tbody>
-                    </table>
-
                     
+                     
+                           <tbody>
+                           <?php $i=0;?>
+                           @foreach($students as $student)
+                          
+                          <tr>
+                            <td><?php echo ++$i;?></td>
+                            <td>{{ $student->name }}</td>
+                            <td>{{ $student->id }}</td>
+                            <td>{{ $student->email }}</td>
+                            <td>{{ $student->phone }}</td>
+                            <td>{{ $student->gender }}</td>
+                            <td>
+                                  <a href="/edituser/{{$student->id}}" class="btn btn-xs btn-info">Edit</a>
+                            </td>
+                            <td>
+                            <a href="/deleteuser/{{$student->id}}" class="btn btn-xs btn-danger">Delete</a>
+                                 
+                            </td>
+                          </tr>
+                        @endforeach
+                     
+</tbody>
+
+</table>
+      
                 </div>
             </div>
         </div>
